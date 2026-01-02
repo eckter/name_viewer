@@ -27,61 +27,75 @@ const App: FC = () => {
 
     if (!nameFound) {
         return (
-            <div>
-                <h2>{name}</h2>
-                <div>Not found</div>
+            <div className="not-found-container">
+                <h2 className="not-found-title">{name}</h2>
+                <div>Prénom non trouvé</div>
             </div>
         );
     }
 
     if (nameData == null) {
         return (
-            <div>
-            <h2>{name}</h2>
-            <div>loading...</div>
-        </div>
+            <div className="loading-container">
+                <h2>{name}</h2>
+                <div>Chargement...</div>
+            </div>
         )
     }
-    const spellings =
-        nameData.other_spellings.length > 1?
-            <div>
-                <h4>Autres orthographes:</h4>
-                <OtherSpellings width={300} entries={nameData.other_spellings}/>
-            </div>
-            : null
-    const genderAcrossSpellings =
-        nameData.other_spellings.length > 1?
-            <div>
-                <h4>Répartition de genre (toute orthographe):</h4>
-                <GenderScale width={300} height={20} value={nameData.phonetic_relative_f}/>
-            </div>
-            : null
+    
     getNameRanking(nameData.count_per_k)
         .then(setNameRanking)
     getRecentNameRanking(nameData.recent_count_per_k)
         .then(setRecentNameRanking)
-    let rankingComponent = null
-    if (nameRanking != null && recentNameRanking != null) {
-        rankingComponent = (
-            <div>
-                <h4>Répartition dans la population:</h4>
-                <div>Dans les 80 dernières années: {nameData.count_per_k.toFixed(2)} pour 1000, position {nameRanking}</div>
-                <div>Dans les 10 dernières années: {nameData.recent_count_per_k.toFixed(2)} pour 1000, position {recentNameRanking}</div>
-            </div>
-        )
-    }
 
     return (
-        <div>
-            <h2>{name} - {nameData.phonetic}</h2>
-            {rankingComponent}
-            <h4>Répartition dans le temps:</h4>
-            <TimePlot data={nameData.years} height={200} width={300}/>
-            {spellings}
-            <h4>Répartition de genre (orthographe précise):</h4>
-            <GenderScale width={300} height={20} value={nameData.F}/>
-            {genderAcrossSpellings}
-            <button onClick={randomRedirect} style={{ marginTop: "100px" }}>Prénom aléatoire</button>
+        <div className="app-container">
+            <div className="app-header">
+                <div>
+                    <h1 className="app-title">{name}</h1>
+                    <p className="app-subtitle">Prononciation: {nameData.phonetic}</p>
+                </div>
+                <button className="random-button header-button" onClick={randomRedirect}>Prénom aléatoire</button>
+            </div>
+            
+            {nameRanking != null && recentNameRanking != null && (
+                <div className="statistics-grid">
+                    <div className="stat-card">
+                        <div className="stat-label">Popularité (80 ans)</div>
+                        <div className="stat-value">{nameData.count_per_k.toFixed(2)} ‰</div>
+                        <div className="stat-label">Position: {nameRanking}</div>
+                    </div>
+                    <div className="stat-card">
+                        <div className="stat-label">Popularité (10 ans)</div>
+                        <div className="stat-value">{nameData.recent_count_per_k.toFixed(2)} ‰</div>
+                        <div className="stat-label">Position: {recentNameRanking}</div>
+                    </div>
+                </div>
+            )}
+
+            <div className="chart-container">
+                <h3 className="section-title">Évolution dans le temps</h3>
+                <TimePlot data={nameData.years} height={300} width={800}/>
+            </div>
+
+            {nameData.other_spellings.length > 1 && (
+                <div className="other-spellings-container">
+                    <h3 className="other-spellings-title">Autres orthographes</h3>
+                    <OtherSpellings width={800} entries={nameData.other_spellings}/>
+                </div>
+            )}
+
+            <div className="gender-scale-container">
+                <h3 className="gender-scale-title">Répartition de genre (orthographe précise)</h3>
+                <GenderScale width={600} height={30} value={nameData.F}/>
+            </div>
+
+            {nameData.other_spellings.length > 1 && (
+                <div className="gender-scale-container">
+                    <h3 className="gender-scale-title">Répartition de genre (toutes orthographes)</h3>
+                    <GenderScale width={600} height={30} value={nameData.phonetic_relative_f}/>
+                </div>
+            )}
         </div>
     );
 };

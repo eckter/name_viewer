@@ -14,11 +14,12 @@ const GenderScale: React.FC<GenderScaleProps> = ({ width, height, value }) => {
     const [showTooltip, setShowTooltip] = useState(false);
 
     return (
-        <div style={{ position: 'relative', width: `${width}px`, height: `${height}px`, display: 'flex', alignItems: 'center' }}>
+        <div className="tooltip" style={{ position: 'relative', width: `${width}px`, height: `${height}px`, display: 'flex', alignItems: 'center' }}>
             <span style={{ position: 'absolute', left: 0, top: '50%', transform: 'translateY(-50%)', fontWeight: 'bold' }}>M</span>
             <span style={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)', fontWeight: 'bold' }}>F</span>
             <div style={{ position: 'absolute', left: `${labelSpace}px`, width: `${scaleWidth}px`, height: '2px', backgroundColor: '#ccc', borderRadius: '1px' }} />
             <div
+                className="tooltip"
                 style={{
                     position: 'absolute',
                     left: `${position}px`,
@@ -26,27 +27,16 @@ const GenderScale: React.FC<GenderScaleProps> = ({ width, height, value }) => {
                     transform: 'translate(-50%, -50%)',
                     width: '12px',
                     height: '12px',
-                    backgroundColor: '#ff5722',
+                    backgroundColor: 'var(--accent-color)',
                     borderRadius: '50%',
-                    border: '2px solid #ff5722',
+                    border: '2px solid var(--accent-color)',
                     cursor: 'pointer',
                 }}
                 onMouseEnter={() => setShowTooltip(true)}
                 onMouseLeave={() => setShowTooltip(false)}
             >
                 {showTooltip && (
-                    <div style={{
-                        position: 'absolute',
-                        top: '-30px',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        backgroundColor: '#333',
-                        color: '#fff',
-                        padding: '5px 10px',
-                        borderRadius: '5px',
-                        fontSize: '12px',
-                        whiteSpace: 'nowrap',
-                    }}>
+                    <div className="tooltiptext">
                         {percentage}%
                     </div>
                 )}

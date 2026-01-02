@@ -1,5 +1,5 @@
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface DataPoint {
     year: number;
@@ -24,13 +24,23 @@ const TimePlot: React.FC<CountPlotProps> = ({ data, width, height }) => {
     }
 
     return (
-        <LineChart width={width} height={height} data={allYears}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="year" />
-            <YAxis />
-            <Tooltip />
-            <Line dataKey="count" stroke="#8884d8" dot={false} />
-        </LineChart>
+        <ResponsiveContainer width="100%" height={height}>
+            <LineChart data={allYears}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e0e0e0" />
+                <XAxis dataKey="year" stroke="var(--text-color)" />
+                <YAxis stroke="var(--text-color)" />
+                <Tooltip 
+                    contentStyle={{ backgroundColor: 'var(--card-bg)', border: '1px solid var(--border-color)' }} 
+                    labelStyle={{ color: 'var(--text-color)' }}
+                />
+                <Line 
+                    dataKey="count" 
+                    stroke="var(--primary-color)" 
+                    strokeWidth={2} 
+                    dot={{ stroke: 'var(--primary-color)', strokeWidth: 2, fill: 'var(--card-bg)' }}
+                />
+            </LineChart>
+        </ResponsiveContainer>
     );
 };
 
