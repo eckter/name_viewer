@@ -4,6 +4,7 @@ import {getNameData, getNameRanking, getRecentNameRanking, NameData} from "./dat
 import TimePlot from "./components/TimePlot";
 import OtherSpellings from "./components/OtherSpellings";
 import GenderScale from "./components/GenderScale";
+import {randomRedirect} from "./RedirectPage";
 
 const App: FC = () => {
     const { pageId } = useParams<{ pageId: string }>();
@@ -80,6 +81,7 @@ const App: FC = () => {
             <h4>Répartition de genre (orthographe précise):</h4>
             <GenderScale width={300} height={20} value={nameData.F}/>
             {genderAcrossSpellings}
+            <button onClick={randomRedirect} style={{ marginTop: "100px" }}>Prénom aléatoire</button>
         </div>
     );
 };
