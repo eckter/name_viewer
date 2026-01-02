@@ -4,12 +4,16 @@ let data: SavedData = {
     nameData: {},
     nameDataNoAccent: {},
     loaded: false,
+    sortedCountPerK: [],
+    sortedRecentCountPerK: [],
 }
 
 export interface SavedData {
     nameData: Record<string, NameData>;
     nameDataNoAccent: Record<string, NameData>;
     loaded: boolean;
+    sortedCountPerK: number[];
+    sortedRecentCountPerK: number[];
 }
 
 export interface OtherSpellingEntry {
@@ -43,6 +47,13 @@ export interface RawNameData {
 
 export async function loadCSVData(): Promise<SavedData> {
     if (data.loaded) return data;
+    let newData: SavedData = {
+        loaded: true,
+        nameData: {},
+        nameDataNoAccent: {},
+        sortedCountPerK: [],
+        sortedRecentCountPerK: []
+    }
     console.log('Loading CSV data...');
     const text = await fetch( "./name_stats.csv" )
         .then( response => response.text() );
@@ -66,14 +77,18 @@ export async function loadCSVData(): Promise<SavedData> {
                 recent_count_per_k: entry.recent_count_per_k,
                 years:JSON.parse(entry.years) as Array<[number,number]>,
             };
-            data.nameData[entry.name] = newEntry;
-            data.nameDataNoAccent[removeAccent(entry.name)] = newEntry;
+            newData.nameData[entry.name] = newEntry;
+            newData.nameDataNoAccent[removeAccent(entry.name)] = newEntry;
+            newData.sortedCountPerK.push(newEntry.count_per_k);
+            newData.sortedRecentCountPerK.push(newEntry.recent_count_per_k);
         } catch (e) {
             console.error("error on data " + entry + ": " + e);
         }
     }
-    console.log('Loading CSV data: done');
-    data.loaded = true;
+    newData.sortedCountPerK.sort();
+    newData.sortedRecentCountPerK.sort();
+    console.log('Loading CSV data: done, ' + newData.sortedCountPerK.length + " values");
+    data = newData
     return data;
 }
 
@@ -87,4 +102,25 @@ export async function getNameData(name: string): Promise<NameData | null> {
     if (res != null)
         return res
     return data.nameDataNoAccent[removeAccent(name.toLowerCase())]
+}
+
+export async function getNameRanking(countPerK: number): Promise<number> {
+    const data = await loadCSVData()
+    const array = data.sortedCountPerK
+    return array.length - findFirstIndexAtLeast(countPerK, array)
+}
+
+export async function getRecentNameRanking(recentCountPerK: number): Promise<number> {
+    const data = await loadCSVData()
+    const array = data.sortedRecentCountPerK
+    return array.length - findFirstIndexAtLeast(recentCountPerK, array)
+}
+
+function findFirstIndexAtLeast(target: number, array: number[]): number {
+    for (let i = 0; i < array.length; i++) {
+        if (array[i] >= target) {
+            return i;
+        }
+    }
+    return array.length;
 }
