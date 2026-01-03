@@ -5,16 +5,16 @@ import TimePlot from "./components/TimePlot";
 import OtherSpellings from "./components/OtherSpellings";
 import GenderPiePlot from "./components/GenderPiePlot";
 import {randomRedirect} from "./RedirectPage";
+import {acceptName, rejectName} from "./nameTracking";
 
-// Placeholder functions for accept/reject actions
-const handleAccept = () => {
-    // TODO: Implement accept functionality
-    console.log("Name accepted");
+const handleAccept = (name: string) => {
+    acceptName(name);
+    randomRedirect().catch(error => console.log(error));
 };
 
-const handleReject = () => {
-    // TODO: Implement reject functionality
-    console.log("Name rejected");
+const handleReject = (name: string) => {
+    rejectName(name);
+    randomRedirect().catch(error => console.log(error));
 };
 
 const App: FC = () => {
@@ -27,13 +27,16 @@ const App: FC = () => {
     const [nameRanking, setNameRanking] = useState<number | null>(null)
     const [recentNameRanking, setRecentNameRanking] = useState<number | null>(null)
 
+    let name = nameData?.name ?? pageId.charAt(0).toUpperCase() + pageId.slice(1).toLowerCase()
+    name = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
+
     // Keyboard shortcuts: A for Accept, R for Reject
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === 'a' || event.key === 'A') {
-                handleAccept();
+                handleAccept(name);
             } else if (event.key === 'r' || event.key === 'R') {
-                handleReject();
+                handleReject(name);
             }
         };
 
@@ -41,10 +44,7 @@ const App: FC = () => {
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, []);
-
-    let name = nameData?.name ?? pageId.charAt(0).toUpperCase() + pageId.slice(1).toLowerCase()
-    name = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
+    }, [name]);
 
     getNameData(name)
         .then((nameData) => {
@@ -52,7 +52,7 @@ const App: FC = () => {
             setNameFound(nameData != null)
         })
 
-    if (!nameFound) {
+    if (nameFound === false) {
         return (
             <div className="not-found-container">
                 <h2 className="not-found-title">{name}</h2>
@@ -69,7 +69,7 @@ const App: FC = () => {
             </div>
         )
     }
-    
+
     getNameRanking(nameData.count_per_k)
         .then(setNameRanking)
     getRecentNameRanking(nameData.recent_count_per_k)
@@ -83,8 +83,8 @@ const App: FC = () => {
                     <p className="app-subtitle">Prononciation: {nameData.phonetic}</p>
                 </div>
                 <div style={{ display: 'flex', gap: '10px' }}>
-                    <button className="action-button accept-button" onClick={handleAccept}>Accepter</button>
-                    <button className="action-button reject-button" onClick={handleReject}>Refuser</button>
+                    <button className="action-button accept-button" onClick={() => handleAccept(name)}>Accepter</button>
+                    <button className="action-button reject-button" onClick={() => handleReject(name)}>Refuser</button>
                 </div>
             </div>
             

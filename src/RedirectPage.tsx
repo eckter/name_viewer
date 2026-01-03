@@ -1,4 +1,3 @@
-import { useEffect } from 'react';
 import {loadCSVData} from "./data";
 
 export async function randomRedirect() {
@@ -13,5 +12,7 @@ export async function randomRedirect() {
 export default function RandomRedirect() {
     randomRedirect()
         .catch(error => console.log(error));
-    return null;
+    return (
+        <h2>Redirecting...</h2>
+    );
 }
