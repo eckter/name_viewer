@@ -356,6 +356,25 @@ body {
   border-bottom: 2px solid #3367d6;
 }
 
+.name-link-item {
+  text-decoration: none;
+  display: block;
+  transition: all 0.05s;
+}
+
+.name-link-item:hover {
+  transform: translateX(6px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.accepted-item.name-link-item:hover {
+  background-color: #c8e6c9;
+}
+
+.rejected-item.name-link-item:hover {
+  background-color: #ffcdd2;
+}
+
 /* List Link Button */
 .list-link-button {
   background-color: var(--card-bg);

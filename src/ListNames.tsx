@@ -89,9 +89,9 @@ const ListNames: FC = () => {
                     {acceptedNames.length > 0 ? (
                         <div className="name-list">
                             {acceptedNames.map((name, index) => (
-                                <div key={index} className="name-item accepted-item">
+                                <a key={index} href={`/${name}`} className="name-item accepted-item name-link-item">
                                     {name}
-                                </div>
+                                </a>
                             ))}
                         </div>
                     ) : (
@@ -105,9 +105,9 @@ const ListNames: FC = () => {
                     {rejectedNames.length > 0 ? (
                         <div className="name-list">
                             {rejectedNames.map((name, index) => (
-                                <div key={index} className="name-item rejected-item">
+                                <a key={index} href={`/${name}`} className="name-item rejected-item name-link-item">
                                     {name}
-                                </div>
+                                </a>
                             ))}
                         </div>
                     ) : (
