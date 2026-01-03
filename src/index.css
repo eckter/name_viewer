@@ -151,7 +151,7 @@ body {
   margin-bottom: 8px;
   padding: 8px;
   border-radius: 4px;
-  transition: background-color 0.2s;
+  transition: background-color 0.05s;
 }
 
 .other-spelling-item:hover {
@@ -162,7 +162,7 @@ body {
   color: var(--primary-color);
   text-decoration: none;
   font-weight: 500;
-  transition: color 0.2s;
+  transition: color 0.05s;
 }
 
 .other-spelling-link:hover {
@@ -215,7 +215,7 @@ body {
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.05s;
   margin-top: 30px;
 }
 
@@ -226,7 +226,7 @@ body {
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.05s;
   height: 44px;
   display: flex;
   align-items: center;
@@ -347,7 +347,7 @@ body {
   color: var(--primary-color);
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.05s;
   border-bottom: 2px solid transparent;
 }
 
@@ -367,7 +367,7 @@ body {
   font-weight: 500;
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.05s;
   height: 44px;
   display: flex;
   align-items: center;
@@ -397,7 +397,7 @@ body {
   margin: 4px 0;
   border-radius: 6px;
   font-size: 0.95rem;
-  transition: all 0.2s;
+  transition: all 0.05s;
   display: flex;
   align-items: center;
 }

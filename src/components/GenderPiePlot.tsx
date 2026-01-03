@@ -66,12 +66,13 @@ const GenderPiePlot: React.FC<GenderScaleProps> = ({ width, height, relativeFema
                         dataKey="value"
                         labelLine={false}
                         label={renderCustomizedLabel}
+                        isAnimationActive={false}
                     >
                         {data.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
                     </Pie>
-                    <Tooltip content={<CustomTooltip />} />
+                    <Tooltip content={<CustomTooltip />} isAnimationActive={false} />
                 </PieChart>
             </ResponsiveContainer>
         </div>

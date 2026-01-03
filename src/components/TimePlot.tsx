@@ -32,12 +32,14 @@ const TimePlot: React.FC<CountPlotProps> = ({ data, width, height }) => {
                 <Tooltip 
                     contentStyle={{ backgroundColor: 'var(--card-bg)', border: '1px solid var(--border-color)' }} 
                     labelStyle={{ color: 'var(--text-color)' }}
+                    isAnimationActive={false}
                 />
                 <Line 
                     dataKey="count" 
                     stroke="var(--primary-color)" 
                     strokeWidth={2} 
                     dot={{ stroke: 'var(--primary-color)', strokeWidth: 2, fill: 'var(--card-bg)' }}
+                    isAnimationActive={false}
                 />
             </LineChart>
         </ResponsiveContainer>
