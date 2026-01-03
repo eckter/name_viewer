@@ -82,7 +82,8 @@ const App: FC = () => {
                     <h1 className="app-title">{name}</h1>
                     <p className="app-subtitle">Prononciation: {nameData.phonetic}</p>
                 </div>
-                <div style={{ display: 'flex', gap: '10px' }}>
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                    <a href="/list" className="list-link-button" style={{ marginRight: '15px' }}>Liste</a>
                     <button className="action-button accept-button" onClick={() => handleAccept(name)}>Accepter</button>
                     <button className="action-button reject-button" onClick={() => handleReject(name)}>Refuser</button>
                 </div>
