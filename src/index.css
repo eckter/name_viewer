@@ -342,6 +342,20 @@ body {
   }
 }
 
+/* Name Link in Header */
+.name-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-bottom: 2px solid transparent;
+}
+
+.name-link:hover {
+  color: #3367d6;
+  border-bottom: 2px solid #3367d6;
+}
+
 /* List Link Button */
 .list-link-button {
   background-color: var(--card-bg);

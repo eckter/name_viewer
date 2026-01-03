@@ -79,7 +79,14 @@ const App: FC = () => {
         <div className="app-container">
             <div className="app-header">
                 <div>
-                    <h1 className="app-title">{name}</h1>
+                    <h1 className="app-title">
+                        <a href={`https://www.may.app/prenoms/${encodeURIComponent(name)}/#:~:text=Signification%20et%20%C3%A9tymologie%20du%20pr%C3%A9nom`}
+                           className="name-link"
+                           target="_blank"
+                           rel="noopener noreferrer">
+                            {name}
+                        </a>
+                    </h1>
                     <p className="app-subtitle">Prononciation: {nameData.phonetic}</p>
                 </div>
                 <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
