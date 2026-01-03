@@ -126,11 +126,11 @@ const App: FC = () => {
             {nameData.other_spellings.length > 1 ? (
                 <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', marginBottom: '20px' }}>
                     <div className="gender-scale-container" style={{ flex: 1, minWidth: '250px', padding: '15px' }}>
-                        <h3 className="gender-scale-title" style={{ marginBottom: '10px', fontSize: '1rem' }}>Genre (orthographe)</h3>
+                        <h3 className="gender-scale-title" style={{ marginBottom: '10px', fontSize: '1rem' }}>Genre (sans homonymes)</h3>
                         <GenderPiePlot width={250} height={160} relativeFemale={nameData.F}/>
                     </div>
                     <div className="gender-scale-container" style={{ flex: 1, minWidth: '250px', padding: '15px' }}>
-                        <h3 className="gender-scale-title" style={{ marginBottom: '10px', fontSize: '1rem' }}>Genre (toutes)</h3>
+                        <h3 className="gender-scale-title" style={{ marginBottom: '10px', fontSize: '1rem' }}>Genre (avec homonymes)</h3>
                         <GenderPiePlot width={250} height={160} relativeFemale={nameData.phonetic_relative_f}/>
                     </div>
                 </div>
