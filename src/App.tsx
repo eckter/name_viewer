@@ -1,10 +1,21 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useState, useEffect} from 'react';
 import { useParams } from 'react-router-dom';
 import {getNameData, getNameRanking, getRecentNameRanking, NameData} from "./data";
 import TimePlot from "./components/TimePlot";
 import OtherSpellings from "./components/OtherSpellings";
 import GenderPiePlot from "./components/GenderPiePlot";
 import {randomRedirect} from "./RedirectPage";
+
+// Placeholder functions for accept/reject actions
+const handleAccept = () => {
+    // TODO: Implement accept functionality
+    console.log("Name accepted");
+};
+
+const handleReject = () => {
+    // TODO: Implement reject functionality
+    console.log("Name rejected");
+};
 
 const App: FC = () => {
     const { pageId } = useParams<{ pageId: string }>();
@@ -15,6 +26,22 @@ const App: FC = () => {
     const [nameFound, setNameFound] = useState<Boolean | null>(null)
     const [nameRanking, setNameRanking] = useState<number | null>(null)
     const [recentNameRanking, setRecentNameRanking] = useState<number | null>(null)
+
+    // Keyboard shortcuts: A for Accept, R for Reject
+    useEffect(() => {
+        const handleKeyDown = (event: KeyboardEvent) => {
+            if (event.key === 'a' || event.key === 'A') {
+                handleAccept();
+            } else if (event.key === 'r' || event.key === 'R') {
+                handleReject();
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+            window.removeEventListener('keydown', handleKeyDown);
+        };
+    }, []);
 
     let name = nameData?.name ?? pageId.charAt(0).toUpperCase() + pageId.slice(1).toLowerCase()
     name = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
@@ -55,7 +82,10 @@ const App: FC = () => {
                     <h1 className="app-title">{name}</h1>
                     <p className="app-subtitle">Prononciation: {nameData.phonetic}</p>
                 </div>
-                <button className="random-button header-button" onClick={randomRedirect}>Prénom aléatoire</button>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                    <button className="action-button accept-button" onClick={handleAccept}>Accepter</button>
+                    <button className="action-button reject-button" onClick={handleReject}>Refuser</button>
+                </div>
             </div>
             
             {nameRanking != null && recentNameRanking != null && (

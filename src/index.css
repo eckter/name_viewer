@@ -219,6 +219,43 @@ body {
   margin-top: 30px;
 }
 
+.action-button {
+  border: none;
+  border-radius: 8px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 120px;
+}
+
+.accept-button {
+  background-color: #c8e6c9;
+  color: #2e7d32;
+}
+
+.accept-button:hover {
+  background-color: #a5d6a7;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(76, 175, 80, 0.3);
+}
+
+.reject-button {
+  background-color: #ffcdd2;
+  color: #c62828;
+}
+
+.reject-button:hover {
+  background-color: #ef9a9a;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(244, 67, 54, 0.3);
+}
+
 .random-button.header-button {
   padding: 12px 24px;
   font-size: 1rem;
