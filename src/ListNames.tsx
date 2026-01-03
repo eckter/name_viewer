@@ -1,10 +1,39 @@
-import React, {FC} from "react";
+import React, {FC, useState, useEffect} from "react";
 import {getAllAcceptedNames, getAllRejectedNames, clearAllTracking} from "./nameTracking";
 import {randomRedirect} from "./RedirectPage";
 
 const ListNames: FC = () => {
     const acceptedNames = getAllAcceptedNames();
     const rejectedNames = getAllRejectedNames();
+    
+    // Gender filter state
+    const [includeBoys, setIncludeBoys] = useState<boolean>(() => {
+        const saved = localStorage.getItem('includeBoys');
+        return saved === null ? true : JSON.parse(saved);
+    });
+    
+    const [includeGirls, setIncludeGirls] = useState<boolean>(() => {
+        const saved = localStorage.getItem('includeGirls');
+        return saved === null ? true : JSON.parse(saved);
+    });
+    
+    // Save to local storage when filters change
+    useEffect(() => {
+        localStorage.setItem('includeBoys', JSON.stringify(includeBoys));
+    }, [includeBoys]);
+    
+    useEffect(() => {
+        localStorage.setItem('includeGirls', JSON.stringify(includeGirls));
+    }, [includeGirls]);
+    
+    // Enhanced reset function that also clears gender filters
+    const handleReset = () => {
+        clearAllTracking();
+        localStorage.removeItem('includeBoys');
+        localStorage.removeItem('includeGirls');
+        setIncludeBoys(true);
+        setIncludeGirls(true);
+    };
 
     function clearTracking() {
         clearAllTracking()
@@ -17,8 +46,40 @@ const ListNames: FC = () => {
                 <h1 className="app-title">Liste des noms</h1>
                 <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                     <button className="random-button header-button" onClick={randomRedirect}>Prénom aléatoire</button>
-                    <button className="random-button header-button" onClick={clearTracking}>Réinitialiser</button>
+                    <button className="random-button header-button" onClick={handleReset}>Réinitialiser</button>
                 </div>
+            </div>
+            
+            {/* Gender filter checkboxes */}
+            <div style={{ 
+                backgroundColor: 'var(--card-bg)', 
+                border: '1px solid var(--border-color)', 
+                borderRadius: '8px',
+                padding: '15px', 
+                marginBottom: '20px',
+                display: 'flex', 
+                gap: '20px',
+                alignItems: 'center'
+            }}>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                    <input 
+                        type="checkbox" 
+                        checked={includeGirls} 
+                        onChange={(e) => setIncludeGirls(e.target.checked)} 
+                        style={{ width: '18px', height: '18px', cursor: 'pointer' }}
+                    />
+                    <span style={{ color: 'var(--text-color)', fontSize: '0.95rem' }}>Inclure les prénoms de filles</span>
+                </label>
+                
+                <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                    <input 
+                        type="checkbox" 
+                        checked={includeBoys} 
+                        onChange={(e) => setIncludeBoys(e.target.checked)} 
+                        style={{ width: '18px', height: '18px', cursor: 'pointer' }}
+                    />
+                    <span style={{ color: 'var(--text-color)', fontSize: '0.95rem' }}>Inclure les prénoms de garçons</span>
+                </label>
             </div>
             
             <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
