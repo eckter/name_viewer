@@ -144,6 +144,64 @@ export const getAllRejectedNames = (): string[] => {
 };
 
 /**
+ * Export tracking data as a simple JSON string
+ * @returns JSON string containing just the accepted and rejected name arrays
+ */
+export const exportTrackingData = (): string => {
+    const acceptedNames = getAcceptedNames();
+    const rejectedNames = getRejectedNames();
+    
+    const exportData = {
+        accepted: acceptedNames,
+        rejected: rejectedNames
+    };
+    
+    return JSON.stringify(exportData, null, 2);
+};
+
+/**
+ * Import tracking data from a JSON string (appends to existing data)
+ * @param jsonData JSON string containing accepted and rejected arrays
+ * @returns true if import was successful, false otherwise
+ */
+export const importTrackingData = (jsonData: string): boolean => {
+    try {
+        const importData = JSON.parse(jsonData);
+        
+        // Get existing data
+        const existingAccepted = getAcceptedNames();
+        const existingRejected = getRejectedNames();
+        
+        // Merge accepted names (avoid duplicates)
+        if (Array.isArray(importData.accepted)) {
+            const mergedAccepted = [...existingAccepted];
+            importData.accepted.forEach(name => {
+                if (!mergedAccepted.includes(name)) {
+                    mergedAccepted.push(name);
+                }
+            });
+            saveAcceptedNames(mergedAccepted);
+        }
+        
+        // Merge rejected names (avoid duplicates)
+        if (Array.isArray(importData.rejected)) {
+            const mergedRejected = [...existingRejected];
+            importData.rejected.forEach(name => {
+                if (!mergedRejected.includes(name)) {
+                    mergedRejected.push(name);
+                }
+            });
+            saveRejectedNames(mergedRejected);
+        }
+        
+        return true;
+    } catch (error) {
+        console.error('Error importing data:', error);
+        return false;
+    }
+};
+
+/**
  * Clear all tracking data (for development/testing)
  */
 export const clearAllTracking = (): void => {

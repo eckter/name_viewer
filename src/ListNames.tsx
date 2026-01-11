@@ -1,5 +1,5 @@
 import React, {FC, useState, useEffect} from "react";
-import {getAllAcceptedNames, getAllRejectedNames, clearAllTracking} from "./nameTracking";
+import {getAllAcceptedNames, getAllRejectedNames, clearAllTracking, exportTrackingData, importTrackingData} from "./nameTracking";
 import {randomRedirect} from "./RedirectPage";
 
 const ListNames: FC = () => {
@@ -35,6 +35,45 @@ const ListNames: FC = () => {
         setIncludeGirls(true);
     };
 
+    const handleExport = () => {
+        const exportData = exportTrackingData();
+        const blob = new Blob([exportData], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        
+        const downloadLink = document.createElement('a');
+        downloadLink.href = url;
+        downloadLink.download = `name-viewer-export-${new Date().toISOString().split('T')[0]}.json`;
+        
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        
+        URL.revokeObjectURL(url);
+    };
+
+    const handleImport = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            const content = e.target?.result as string;
+            if (content) {
+                const success = importTrackingData(content);
+                if (success) {
+                    alert('Importation réussie ! Les données ont été ajoutées à votre liste existante. La page va se recharger.');
+                    window.location.reload();
+                } else {
+                    alert('Échec de l\'importation. Veuillez vérifier le format du fichier et réessayer.');
+                }
+            }
+        };
+        reader.readAsText(file);
+        
+        // Reset file input
+        event.target.value = '';
+    };
+
     function clearTracking() {
         clearAllTracking()
         window.location.reload();
@@ -44,9 +83,19 @@ const ListNames: FC = () => {
         <div className="app-container">
             <div className="app-header" style={{ marginBottom: '20px' }}>
                 <h1 className="app-title">Liste des noms</h1>
-                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
                     <button className="random-button header-button" onClick={randomRedirect}>Prénom aléatoire</button>
                     <button className="random-button header-button" onClick={handleReset}>Réinitialiser</button>
+                    <button className="random-button header-button" onClick={handleExport}>Exporter</button>
+                    <label className="random-button header-button" style={{ cursor: 'pointer' }}>
+                        Importer
+                        <input 
+                            type="file" 
+                            accept=".json"
+                            onChange={handleImport}
+                            style={{ display: 'none' }} 
+                        />
+                    </label>
                 </div>
             </div>
             
