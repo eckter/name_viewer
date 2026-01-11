@@ -22,10 +22,10 @@ async function getEligibleNames(): Promise<string[]> {
             continue
         }
         const nameData = data.nameData[name]
-        if (!includeGirls && (nameData.F > 0.6 && nameData.phonetic_relative_f > 0.6)) {
+        if (!includeGirls && nameData.F > 0.6) {
             continue
         }
-        if (!includeBoys && (nameData.F < 0.4 && nameData.phonetic_relative_f < 0.4)) {
+        if (!includeBoys && nameData.F < 0.4) {
             continue
         }
         result.push(name)
