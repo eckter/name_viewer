@@ -5,15 +5,17 @@ import TimePlot from "./components/TimePlot";
 import OtherSpellings from "./components/OtherSpellings";
 import GenderPiePlot from "./components/GenderPiePlot";
 import {randomRedirect} from "./RedirectPage";
-import {acceptName, rejectName} from "./nameTracking";
+import {acceptThisRejectOthers, rejectAllSpellings} from "./nameTracking";
 
-const handleAccept = (name: string) => {
-    acceptName(name);
+const handleAccept = (name: string, otherSpellings: OtherSpellingEntry[]) => {
+    const spellingNames = otherSpellings.map(s => s.name);
+    acceptThisRejectOthers(name, spellingNames);
     randomRedirect().catch(error => console.log(error));
 };
 
-const handleReject = (name: string) => {
-    rejectName(name);
+const handleReject = (name: string, otherSpellings: OtherSpellingEntry[]) => {
+    const spellingNames = otherSpellings.map(s => s.name);
+    rejectAllSpellings(name, spellingNames);
     randomRedirect().catch(error => console.log(error));
 };
 
@@ -30,13 +32,13 @@ const App: FC = () => {
     let name = nameData?.name ?? pageId.charAt(0).toUpperCase() + pageId.slice(1).toLowerCase()
     name = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
 
-    // Keyboard shortcuts: A for Accept, R for Reject
+    // Keyboard shortcuts: A for Accept this spelling, R for Reject all spellings
     useEffect(() => {
         const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === 'a' || event.key === 'A') {
-                handleAccept(name);
+                handleAccept(name, nameData.other_spellings);
             } else if (event.key === 'r' || event.key === 'R') {
-                handleReject(name);
+                handleReject(name, nameData.other_spellings);
             }
         };
 
@@ -44,7 +46,7 @@ const App: FC = () => {
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
         };
-    }, [name]);
+    }, [name, nameData]);
 
     getNameData(name)
         .then((nameData) => {
@@ -89,10 +91,16 @@ const App: FC = () => {
                     </h1>
                     <p className="app-subtitle">Prononciation: {nameData.phonetic}</p>
                 </div>
-                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
                     <a href="/list" className="list-link-button" style={{ marginRight: '15px' }}>Liste</a>
-                    <button className="action-button accept-button" onClick={() => handleAccept(name)}>Accepter</button>
-                    <button className="action-button reject-button" onClick={() => handleReject(name)}>Refuser</button>
+                    <button className="action-button accept-button" 
+                            onClick={() => handleAccept(name, nameData.other_spellings)}>
+                        Accepter cette orthographe
+                    </button>
+                    <button className="action-button reject-button" 
+                            onClick={() => handleReject(name, nameData.other_spellings)}>
+                        Refuser toutes les orthographes
+                    </button>
                 </div>
             </div>
             

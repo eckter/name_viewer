@@ -53,6 +53,25 @@ export const acceptName = (name: string): void => {
 };
 
 /**
+ * Accept a specific spelling and reject all other spellings
+ * @param name The name spelling to accept
+ * @param otherSpellings Array of other spellings to reject
+ */
+export const acceptThisRejectOthers = (name: string, otherSpellings: string[]): void => {
+    // Accept the main name
+    acceptName(name);
+    
+    // Reject all other spellings
+    const rejectedNames = getRejectedNames();
+    otherSpellings.forEach(spelling => {
+        if (!rejectedNames.includes(spelling) && spelling !== name) {
+            rejectedNames.push(spelling);
+        }
+    });
+    saveRejectedNames(rejectedNames);
+};
+
+/**
  * Reject a name and add it to the rejected list
  * @param name The name to reject
  */
@@ -68,6 +87,25 @@ export const rejectName = (name: string): void => {
         rejectedNames.push(name);
         saveRejectedNames(rejectedNames);
     }
+};
+
+/**
+ * Reject a name and all its alternative spellings
+ * @param name The name to reject
+ * @param otherSpellings Array of other spellings to reject
+ */
+export const rejectAllSpellings = (name: string, otherSpellings: string[]): void => {
+    // Reject the main name
+    rejectName(name);
+    
+    // Reject all other spellings
+    const rejectedNames = getRejectedNames();
+    otherSpellings.forEach(spelling => {
+        if (!rejectedNames.includes(spelling)) {
+            rejectedNames.push(spelling);
+        }
+    });
+    saveRejectedNames(rejectedNames);
 };
 
 /**
