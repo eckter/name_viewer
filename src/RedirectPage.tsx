@@ -1,5 +1,5 @@
 import {loadCSVData} from "./data";
-import {getAllAcceptedNames} from "./nameTracking";
+import {getAllAcceptedNames, getAllRejectedNames} from "./nameTracking";
 
 function getLocalStorageBool(key: string, defaultValue: boolean): Boolean {
     const entry = localStorage.getItem(key);
@@ -11,14 +11,15 @@ function getLocalStorageBool(key: string, defaultValue: boolean): Boolean {
 async function getEligibleNames(): Promise<string[]> {
     const data = await loadCSVData()
     const accepted = getAllAcceptedNames()
-    const rejected = getAllAcceptedNames()
+    const rejected = getAllRejectedNames()
     const names = Object.keys(data.nameData)
     const includeBoys = getLocalStorageBool("includeBoys", true)
     const includeGirls = getLocalStorageBool("includeGirls", true)
     let result: string[] = []
     for (let i = 0; i < names.length; i++) {
         const name = names[i]
-        if (rejected.includes(name) || accepted.includes(name)) {
+        const nameWithCase = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
+        if (rejected.includes(nameWithCase) || accepted.includes(nameWithCase)) {
             continue
         }
         const nameData = data.nameData[name]
