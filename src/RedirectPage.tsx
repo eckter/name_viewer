@@ -17,9 +17,10 @@ async function getEligibleNames(): Promise<string[]> {
     const includeGirls = getLocalStorageBool("includeGirls", true)
     let result: string[] = []
     for (let i = 0; i < names.length; i++) {
-        const name = names[i]
+        const name = names[i].toLowerCase()
         const nameWithCase = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()
-        if (rejected.includes(nameWithCase) || accepted.includes(nameWithCase)) {
+        if (rejected.includes(nameWithCase) || accepted.includes(nameWithCase)
+            || rejected.includes(name) || accepted.includes(name)) {
             continue
         }
         const nameData = data.nameData[name]
